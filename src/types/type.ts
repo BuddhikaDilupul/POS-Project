@@ -51,7 +51,7 @@ export enum ProductStatus{
 
 //enum for order status
 export enum OrderStatus{
-    PENDING = "PENDING",
+    PLACED = "PLACED",
     PROCESSING = "PROCESSING",
     WAITING = "WAITING",
     COMPLETED = "COMPLETED",
