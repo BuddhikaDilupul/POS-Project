@@ -23,6 +23,7 @@ const ProductAddonSchema = new Schema<IProductAddon>(
       type: String,
       enum: Object.values(Status),
       required: true,
+      default:Status.ACTIVE
     },
     availabilityStataus: {
       type: String,

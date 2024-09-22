@@ -25,7 +25,8 @@ const ProductSchema = new Schema<IProduct>(
     sellingPrice: { type: Number, required: true },
     status: {
       type: String,
-      enum: Object.values(Status), default:Status.ACTIVE,
+      enum: Object.values(Status),
+      default: Status.ACTIVE,
       required: true,
     },
     availabilityStatus: {
@@ -33,7 +34,11 @@ const ProductSchema = new Schema<IProduct>(
       enum: Object.values(ProductStatus),
       required: true,
     },
-    lastUpdatedBy: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
+    lastUpdatedBy: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Users",
+    },
   },
   {
     timestamps: { createdAt: "createdAt", updatedAt: "lastUpdatedAt" },

@@ -23,13 +23,18 @@ const SubProductSchema = new Schema<ISubProduct>(
       type: String,
       enum: Object.values(Status),
       required: true,
+      default: Status.ACTIVE,
     },
     availabilityStatus: {
       type: String,
       enum: Object.values(ProductStatus),
       required: true,
     },
-    lastUpdatedBy: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
+    lastUpdatedBy: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Users",
+    },
   },
   {
     timestamps: { createdAt: "createdAt", updatedAt: "lastUpdatedAt" },
@@ -37,6 +42,9 @@ const SubProductSchema = new Schema<ISubProduct>(
 );
 
 // Create the model
-const SubProductModel = mongoose.model<ISubProduct>("SubProducts", SubProductSchema);
+const SubProductModel = mongoose.model<ISubProduct>(
+  "SubProducts",
+  SubProductSchema
+);
 
 export default SubProductModel;

@@ -10,7 +10,6 @@ export const createProduct = async (req: Request, res: Response) => {
     categoryId,
     description,
     sellingPrice,
-    status,
     availabilityStatus,
   } = req.body;
   const lastUpdatedBy = req.userId; // assuming userId is attached to the request

@@ -789,9 +789,6 @@
                 "sellingPrice": {
                   "example": "any"
                 },
-                "status": {
-                  "example": "any"
-                },
                 "availabilityStatus": {
                   "example": "any"
                 }
@@ -981,9 +978,6 @@
                 "sellingPrice": {
                   "example": "any"
                 },
-                "status": {
-                  "example": "any"
-                },
                 "availabilityStatus": {
                   "example": "any"
                 }
@@ -1171,9 +1165,6 @@
                   "example": "any"
                 },
                 "sellingPrice": {
-                  "example": "any"
-                },
-                "status": {
                   "example": "any"
                 },
                 "availabilityStatus": {

@@ -5,7 +5,7 @@ import { ProductStatus, Status } from "../../types/type";
 
 // Create a new sub-product
 export const createSubProduct = async (req: Request, res: Response) => {
-  const { name, inStockQuantity, purchasedCost, sellingPrice, status, availabilityStatus } = req.body;
+  const { name, inStockQuantity, purchasedCost, sellingPrice, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId; // Assuming userId is attached to the request object
 
   try {
@@ -14,7 +14,6 @@ export const createSubProduct = async (req: Request, res: Response) => {
       inStockQuantity,
       purchasedCost,
       sellingPrice,
-      status: status || Status.ACTIVE, // Default to ACTIVE if not provided
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK
       lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
     });

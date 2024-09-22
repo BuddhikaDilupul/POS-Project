@@ -5,7 +5,7 @@ import { Status, ProductStatus } from "../../types/type";
 
 // Create a new product addon
 export const createProductAddon = async (req: Request, res: Response) => {
-  const { stockId, ingredientsId, sellingQuantity, sellingPrice, status, availabilityStatus } = req.body;
+  const { stockId, ingredientsId, sellingQuantity, sellingPrice, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId; // assuming `userId` is attached to the request
 
   try {
@@ -14,7 +14,6 @@ export const createProductAddon = async (req: Request, res: Response) => {
       ingredientsId: new mongoose.Types.ObjectId(ingredientsId),
       sellingQuantity,
       sellingPrice,
-      status: status || Status.ACTIVE, // Default to ACTIVE if not provided
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK if not provided
       lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
     });
