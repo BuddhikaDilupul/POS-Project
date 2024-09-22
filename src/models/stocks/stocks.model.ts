@@ -4,8 +4,11 @@ import { ProductStatus, Status, Unit } from "../../types/type";
 // Define the recipe interface
 export interface IStocks extends Document {
   name: string;
+  suplierId: mongoose.Types.ObjectId;
   ingredientId: mongoose.Types.ObjectId;
   inStockCount: number;
+  damadgedCount?: number;
+  loss?: number;
   availabilityStatus: ProductStatus;
   status: Status;
   unitPrice: number;
@@ -29,12 +32,15 @@ const StockSchema = new Schema<IStocks>(
       default: Status.ACTIVE,
       required: true,
     },
-    unitType: { 
-      type: String, 
-      enum: Object.values(Unit), 
+    unitType: {
+      type: String,
+      enum: Object.values(Unit),
       required: true,
     },
+    loss: { type: Number, default: 0 },
+    damadgedCount: { type: Number, default: 0 },
     inStockCount: { type: Number, required: true },
+    suplierId: { type: Schema.Types.ObjectId, required: true, ref: "Suplier" },
     availabilityStatus: {
       type: String,
       enum: Object.values(ProductStatus),

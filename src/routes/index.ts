@@ -6,6 +6,7 @@ import recipeRouter from "../routes/recipe/index";
 import productRouter from "../routes/product/index";
 import categoryRouter from "../routes/category/index";
 import stockRouter from "../routes/stock/index";
+import suplierRouter from "../routes/supliers/index";
 const router: Router = express.Router();
 
 router.use("/user", userRouter);
@@ -15,5 +16,6 @@ router.use("/recipe", recipeRouter);
 router.use("/product", productRouter);
 router.use("/category", categoryRouter);
 router.use("/stock", stockRouter);
+router.use("/suplier", suplierRouter);
 
 export default router;

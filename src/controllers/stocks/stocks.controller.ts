@@ -8,6 +8,7 @@ import IngredientsModel from "../../models/ingredients/ingredients.model";
 const createStock = async (req: Request, res: Response) => {
   const {
     name,
+    suplierId,  // New field
     ingredientId,
     inStockCount,
     availabilityStatus,
@@ -20,6 +21,7 @@ const createStock = async (req: Request, res: Response) => {
   try {
     const stock = new StockModel({
       name,
+      suplierId: new mongoose.Types.ObjectId(suplierId),  // Adding supplier ID
       ingredientId: new mongoose.Types.ObjectId(ingredientId),
       inStockCount,
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK if not provided
@@ -43,7 +45,12 @@ const getAllStocks = async (req: Request, res: Response) => {
       .populate({
         path: "ingredientId",
         select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude unnecessary fields
+      })
+      .populate({
+        path: "suplierId",
+        select: "name contactNumber",  // Populate supplier details
       });
+
     res.status(200).json(stocks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch stocks", details: error });
@@ -57,7 +64,9 @@ const getStockById = async (req: Request, res: Response) => {
     const stock = await StockModel.findOne({
       _id: id,
       status: { $ne: Status.DELETED },
-    }).populate("ingredientId");
+    })
+      .populate("ingredientId")
+      .populate("suplierId"); // Populate supplier details
 
     if (!stock) {
       return res.status(404).json({ error: "Stock not found" });
@@ -97,7 +106,9 @@ const deleteStock = async (req: Request, res: Response) => {
     const stock = await StockModel.findOne({
       _id: id,
       status: Status.ACTIVE,
-    }).populate("ingredientId");
+    })
+      .populate("ingredientId")
+      .populate("suplierId"); // Populate supplier details
 
     if (!stock) {
       return res.status(404).json({ error: "Stock not found or already deleted." });
@@ -155,4 +166,4 @@ export default {
   getStockById,
   updateStock,
   deleteStock,
-}
+};

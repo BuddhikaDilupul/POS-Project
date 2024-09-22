@@ -30,7 +30,9 @@ const createCustomer = async (req: Request, res: Response) => {
 // Get all customers
 const getAllCustomers = async (req: Request, res: Response) => {
   try {
-    const customers = await CustomerModel.find();
+    const customers = await CustomerModel.find({
+      status: { $ne: UserStatus.DELETED },
+    });
     res.status(200).json(customers);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
@@ -42,7 +44,10 @@ const getCustomerById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const customer = await CustomerModel.findById(id);
+    const customer = await CustomerModel.findOne({
+      _id: id,
+      status: { $ne: UserStatus.DELETED },
+    });
     if (!customer) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -89,7 +94,9 @@ const deleteCustomer = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const deletedCustomer = await CustomerModel.findByIdAndUpdate(id,{status:UserStatus.DELETED});
+    const deletedCustomer = await CustomerModel.findByIdAndUpdate(id, {
+      status: UserStatus.DELETED,
+    });
     if (!deletedCustomer) {
       return res.status(404).json({ error: "Customer not found" });
     }
@@ -102,9 +109,9 @@ const deleteCustomer = async (req: Request, res: Response) => {
 
 // Export all controller functions
 export default {
-    createCustomer,
-    getAllCustomers,
-    getCustomerById,
-    updateCustomer,
-    deleteCustomer,
-  };
+  createCustomer,
+  getAllCustomers,
+  getCustomerById,
+  updateCustomer,
+  deleteCustomer,
+};
