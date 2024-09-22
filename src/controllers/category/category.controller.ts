@@ -50,7 +50,9 @@ const updateCategory = async (req: Request, res: Response) => {
 // Get a list of all categories
 const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await CategoryModel.find();
+    const categories = await CategoryModel.find({
+      status: { $ne: Status.DELETED },
+    });
     res.status(200).json({ data: categories });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
@@ -62,8 +64,11 @@ const getCategoryById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const category = await CategoryModel.findById(id);
-
+    const category = await CategoryModel.findOne({
+      _id: id,
+      status: { $ne: Status.DELETED },
+    });
+    
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
     }
@@ -80,7 +85,10 @@ const deleteCategory = async (req: Request, res: Response) => {
 
   try {
     // Check if there are any products associated with this recipe
-    const associatedProducts = await ProductModel.find({ categoryId: id });
+    const associatedProducts = await ProductModel.find({
+      categoryId: id,
+      status: { $ne: Status.DELETED },
+    });
 
     if (associatedProducts.length > 0) {
       return res.status(400).json({

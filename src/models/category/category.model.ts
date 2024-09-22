@@ -15,9 +15,14 @@ const CategorySchema = new Schema<ICategory>(
     status: {
       type: String,
       enum: Object.values(Status),
+      default: Status.ACTIVE,
       required: true,
     },
-    lastUpdatedBy: { type: Schema.Types.ObjectId, required: true, ref: "Users" },
+    lastUpdatedBy: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Users",
+    },
   },
   {
     timestamps: { createdAt: "createdAt", updatedAt: "lastUpdatedAt" },

@@ -5,7 +5,14 @@ import { ProductStatus, Status } from "../../types/type";
 
 // Create a new product
 export const createProduct = async (req: Request, res: Response) => {
-  const { recipeId, categoryId, description, sellingPrice, status, availabilityStatus } = req.body;
+  const {
+    recipeId,
+    categoryId,
+    description,
+    sellingPrice,
+    status,
+    availabilityStatus,
+  } = req.body;
   const lastUpdatedBy = req.userId; // assuming userId is attached to the request
 
   try {
@@ -28,7 +35,17 @@ export const createProduct = async (req: Request, res: Response) => {
 // Get all products
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await ProductModel.find({ status: { $ne: Status.DELETED } });
+    const products = await ProductModel.find({
+      status: { $ne: Status.DELETED },
+    })
+      .populate({
+        path: "recipeId",
+        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
+      })
+      .populate({
+        path: "categoryId",
+        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude the 'lastUpdatedAt' field from the populated category
+      });
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
@@ -40,9 +57,15 @@ export const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const product = await ProductModel.findById(id)
-      .populate("recipeId")
-      // .populate("categoryId");
+    const product = await ProductModel.findById(id).populate({
+      path: "recipeId",
+      select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
+    })
+    .populate({
+      path: "categoryId",
+      select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude the 'lastUpdatedAt' field from the populated category
+    });;
+    // .populate("categoryId");
     if (!product || product.status === Status.DELETED) {
       return res.status(404).json({ error: "Product not found" });
     }
@@ -55,7 +78,14 @@ export const getProductById = async (req: Request, res: Response) => {
 // Update a product
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { recipeId, categoryId, description, sellingPrice, status, availabilityStatus } = req.body;
+  const {
+    recipeId,
+    categoryId,
+    description,
+    sellingPrice,
+    status,
+    availabilityStatus,
+  } = req.body;
   const lastUpdatedBy = req.userId;
 
   try {
@@ -63,7 +93,9 @@ export const updateProduct = async (req: Request, res: Response) => {
       id,
       {
         recipeId: recipeId ? new mongoose.Types.ObjectId(recipeId) : undefined,
-        categoryId: categoryId ? new mongoose.Types.ObjectId(categoryId) : undefined,
+        categoryId: categoryId
+          ? new mongoose.Types.ObjectId(categoryId)
+          : undefined,
         description,
         sellingPrice,
         status,
