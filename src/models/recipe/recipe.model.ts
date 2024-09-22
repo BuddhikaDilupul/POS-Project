@@ -17,11 +17,24 @@ export interface IRecipe extends Document {
 const RecipeSchema = new Schema<IRecipe>(
   {
     name: { type: String, required: true },
-    status: { type: String, enum: Object.values(Status), default: Status.ACTIVE, required: true },
+    status: {
+      type: String,
+      enum: Object.values(Status),
+      default: Status.ACTIVE,
+      required: true,
+    },
     ingredients: [
       {
-        ingredientId: { type: Schema.Types.ObjectId, required: true },
-        quantityType: { type: String, enum: Object.values(Unit), required: true },
+        ingredientId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: "Ingredients",
+        },
+        quantityType: {
+          type: String,
+          enum: Object.values(Unit),
+          required: true,
+        },
         quantity: { type: Number, required: true },
       },
     ],

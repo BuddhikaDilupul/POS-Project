@@ -40,6 +40,10 @@ export const getAllProducts = async (req: Request, res: Response) => {
       .populate({
         path: "recipeId",
         select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
+        populate: {
+          path: "ingredients.ingredientId", // Populate ingredientId inside ingredients array
+          select: "name", // Include the name of the ingredient
+        },
       })
       .populate({
         path: "categoryId",
