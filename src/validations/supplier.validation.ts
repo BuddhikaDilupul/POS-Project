@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { UserStatus } from 'types/type';
+import { UserStatus } from '../types/type';
 
 const supplierValidation = {
   createSupplier: {
