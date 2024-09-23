@@ -1084,6 +1084,9 @@
                 "sellingPrice": {
                   "example": "any"
                 },
+                "status": {
+                  "example": "any"
+                },
                 "availabilityStatus": {
                   "example": "any"
                 }
@@ -1614,11 +1617,47 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "ingredientId": {
+                  "example": "any"
+                },
+                "inStockCount": {
+                  "example": "any"
+                },
+                "availabilityStatus": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "unitPrice": {
+                  "example": "any"
+                },
+                "unitType": {
+                  "example": "any"
+                },
+                "expireDate": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"

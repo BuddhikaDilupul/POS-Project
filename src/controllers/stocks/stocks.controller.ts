@@ -8,7 +8,7 @@ import IngredientsModel from "../../models/ingredients/ingredients.model";
 const createStock = async (req: Request, res: Response) => {
   const {
     name,
-    suplierId,  // New field
+    suplierId, // New field
     ingredientId,
     inStockCount,
     availabilityStatus,
@@ -21,7 +21,7 @@ const createStock = async (req: Request, res: Response) => {
   try {
     const stock = new StockModel({
       name,
-      suplierId: new mongoose.Types.ObjectId(suplierId),  // Adding supplier ID
+      suplierId: new mongoose.Types.ObjectId(suplierId), // Adding supplier ID
       ingredientId: new mongoose.Types.ObjectId(ingredientId),
       inStockCount,
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK if not provided
@@ -48,7 +48,7 @@ const getAllStocks = async (req: Request, res: Response) => {
       })
       .populate({
         path: "suplierId",
-        select: "name contactNumber",  // Populate supplier details
+        select: "name contactNumber", // Populate supplier details
       });
 
     res.status(200).json(stocks);
@@ -81,19 +81,57 @@ const getStockById = async (req: Request, res: Response) => {
 // Update a stock
 const updateStock = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const {
+    name,
+    ingredientId, // Should be a valid ObjectId
+    inStockCount,
+    availabilityStatus,
+    status,
+    unitPrice,
+    unitType,
+    expireDate,
+  } = req.body;
+
+  // Validate stock ID (ensure it's a valid ObjectId)
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid stock ID" });
+  }
+
+  // Validate ingredientId if provided
+  if (ingredientId && !mongoose.Types.ObjectId.isValid(ingredientId)) {
+    return res.status(400).json({ error: "Invalid ingredient ID" });
+  }
+
   try {
-    const updatedStock = await StockModel.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedStock = await StockModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        ingredientId: ingredientId
+          ? new mongoose.Types.ObjectId(ingredientId)
+          : undefined, // Convert if provided
+        inStockCount,
+        availabilityStatus,
+        status,
+        unitPrice,
+        unitType,
+        expireDate,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedStock) {
       return res.status(404).json({ error: "Stock not found" });
     }
 
     res.status(200).json(updatedStock);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update stock", details: error });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "Failed to update stock", details: error.message });
   }
 };
 
@@ -111,7 +149,9 @@ const deleteStock = async (req: Request, res: Response) => {
       .populate("suplierId"); // Populate supplier details
 
     if (!stock) {
-      return res.status(404).json({ error: "Stock not found or already deleted." });
+      return res
+        .status(404)
+        .json({ error: "Stock not found or already deleted." });
     }
 
     // Check if there are other active stocks associated with this ingredient

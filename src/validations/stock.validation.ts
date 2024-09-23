@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { ProductStatus, Unit } from "../types/type";
+import { ProductStatus, Status, Unit } from "../types/type";
 
 // Validation for creating a stock
 export const createStockValidation = {
@@ -28,7 +28,7 @@ export const updateStockValidation = {
     ingredientId: Joi.string(), // Should be a valid ObjectId
     inStockCount: Joi.number().positive(),
     availabilityStatus: Joi.string().valid(...Object.values(ProductStatus)),
-    status: Joi.string().valid("ACTIVE", "INACTIVE", "DELETED"),
+    status: Joi.string().valid(...Object.values(Status)),
     unitPrice: Joi.number().positive(),
     unitType: Joi.string().valid(...Object.values(Unit)),
     expireDate: Joi.date(),
