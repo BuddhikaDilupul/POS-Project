@@ -61,7 +61,7 @@ const getSuplierById = async (req: Request, res: Response) => {
 // Update a supplier
 const updateSuplier = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, contactNumber, address } = req.body;
+  const { name, contactNumber, address, status } = req.body;
   const lastUpdatedBy = req.userId;
 
   try {
@@ -71,6 +71,7 @@ const updateSuplier = async (req: Request, res: Response) => {
         name,
         contactNumber,
         address,
+        status,
         lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
       },
       { new: true, runValidators: true }
