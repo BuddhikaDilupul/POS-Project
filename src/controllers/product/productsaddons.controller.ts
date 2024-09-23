@@ -55,7 +55,7 @@ export const getProductAddonById = async (req: Request, res: Response) => {
 // Update a product addon
 export const updateProductAddon = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { stockId, ingredientsId, sellingQuantity, sellingPrice, availabilityStatus } = req.body;
+  const { stockId, ingredientsId, sellingQuantity, sellingPrice, status, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId;
 
   try {
@@ -66,6 +66,7 @@ export const updateProductAddon = async (req: Request, res: Response) => {
         ingredientsId: ingredientsId ? new mongoose.Types.ObjectId(ingredientsId) : undefined,
         sellingQuantity,
         sellingPrice,
+        status,
         availabilityStatus,
         lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
       },

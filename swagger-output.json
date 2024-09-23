@@ -1084,9 +1084,6 @@
                 "sellingPrice": {
                   "example": "any"
                 },
-                "status": {
-                  "example": "any"
-                },
                 "availabilityStatus": {
                   "example": "any"
                 }

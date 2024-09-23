@@ -15,6 +15,7 @@ const productValidation = {
     body: Joi.object({
       recipeId: Joi.string().optional(), // Optional ObjectId
       categoryId: Joi.string().optional(), // Optional ObjectId
+      status: Joi.string().valid(...Object.values(Status)).optional(), // Optional status
       description: Joi.string().optional(),
       sellingPrice: Joi.number().greater(0).optional(), // Must be a positive number
       availabilityStatus: Joi.string().valid(...Object.values(ProductStatus)).optional(), // Optional availability status
