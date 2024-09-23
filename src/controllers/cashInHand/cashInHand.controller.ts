@@ -62,13 +62,13 @@ const getCashInHandById = async (req: Request, res: Response) => {
 const updateCashInHand = async (req: Request, res: Response) => {
   const { id } = req.params;
   const lastUpdatedBy = req.userId;
-  const cash = req.body;
+  const { cash } = req.body;
 
   try {
     const updatedCashInHand = await ICashInHandModel.findByIdAndUpdate(
       id,
       {
-        cash,
+        cash:cash,
         lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
       },
       { new: true, runValidators: true }
