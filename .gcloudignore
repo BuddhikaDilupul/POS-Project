@@ -1,0 +1,9 @@
+# Exclude these files and directories
+.git
+.gitignore
+node_modules
+
+# Include swagger-output.json
+!swagger-output.json
+# Include the dist folder if needed
+!dist/**
