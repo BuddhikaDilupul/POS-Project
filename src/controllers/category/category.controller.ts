@@ -53,7 +53,7 @@ const getCategories = async (req: Request, res: Response) => {
     const categories = await CategoryModel.find({
       status: { $ne: Status.DELETED },
     });
-    res.status(200).json({ data: categories });
+    res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
