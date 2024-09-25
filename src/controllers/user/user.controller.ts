@@ -228,7 +228,7 @@ const getAllUser = async (
 ): Promise<void> => {
   try {
     const users: IUser_Custom[] | null = await UserModel.find().select(
-      "-nic -password "
+      "_id firstName lastName" // Select only _id, firstName, and lastName fields
     );
     res.status(200).json(users);
   } catch (error) {
