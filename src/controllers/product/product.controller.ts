@@ -30,25 +30,49 @@ export const createProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
 };
+// Get all products with optional categoryId as a query parameter
+export const getAllProductsCategoryWise = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { categoryId } = req.query; // Extract categoryId from query parameters
+
+    const products = await ProductModel.find({
+      status: { $ne: Status.DELETED },
+      categoryId: categoryId,
+    }).select(
+      "name _id availabilityStatus sellingPrice description" // Only select these fields
+    );
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error", details: error });
+  }
+};
 
 // Get all products
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await ProductModel.find({
-      status: { $ne: Status.DELETED },
-    })
-      .populate({
-        path: "recipeId",
-        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
-        populate: {
-          path: "ingredients.ingredientId", // Populate ingredientId inside ingredients array
-          select: "name", // Include the name of the ingredient
-        },
-      })
-      .populate({
-        path: "categoryId",
-        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude the 'lastUpdatedAt' field from the populated category
-      });
+    const products = await ProductModel.find(
+      {
+        status: { $ne: Status.DELETED }, // Filter out DELETED status
+      },
+      "name _id availabilityStatus sellingPrice description" // Only select these fields
+    );
+    // .populate({
+    //   path: "recipeId",
+    //   select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude fields from the recipe if necessary
+    //   populate: {
+    //     path: "ingredients.ingredientId", // Populate ingredientId inside ingredients array
+    //     select: "name", // Include the name of the ingredient
+    //   },
+    // })
+    // .populate({
+    //   path: "categoryId",
+    //   select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude unnecessary fields from category
+    // });
+
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
@@ -60,14 +84,15 @@ export const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const product = await ProductModel.findById(id).populate({
-      path: "recipeId",
-      select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
-    })
-    .populate({
-      path: "categoryId",
-      select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude the 'lastUpdatedAt' field from the populated category
-    });;
+    const product = await ProductModel.findById(id)
+      .populate({
+        path: "recipeId",
+        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // You can exclude fields from the recipe if necessary
+      })
+      .populate({
+        path: "categoryId",
+        select: "-lastUpdatedAt -createdAt -lastUpdatedBy -status", // Exclude the 'lastUpdatedAt' field from the populated category
+      });
     // .populate("categoryId");
     if (!product || product.status === Status.DELETED) {
       return res.status(404).json({ error: "Product not found" });

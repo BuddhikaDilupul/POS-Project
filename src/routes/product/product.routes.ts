@@ -30,6 +30,12 @@ router.get(
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
   getAllProducts
 );
+router.get(
+  "/getAllProductsCategoryWise",
+  authenticate,
+  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
+  getAllProducts
+);
 
 // Get product by ID
 router.get(

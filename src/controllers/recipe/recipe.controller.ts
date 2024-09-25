@@ -26,7 +26,9 @@ export const createRecipe = async (req: Request, res: Response) => {
 // Get all recipes
 export const getAllRecipes = async (req: Request, res: Response) => {
   try {
-    const recipes = await RecipeModel.find({ status: { $ne: Status.DELETED } }); // Exclude deleted recipes
+    const recipes = await RecipeModel.find({
+      status: { $ne: Status.DELETED },
+    }).select("_id name");
     res.status(200).json(recipes);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
@@ -84,15 +86,13 @@ export const deleteRecipe = async (req: Request, res: Response) => {
   try {
     // Check if there are any products associated with this recipe
     const associatedProducts = await ProductModel.find({ recipeId: id });
-    console.log(associatedProducts,">>");
-    
+    console.log(associatedProducts, ">>");
+
     if (associatedProducts.length > 0) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Cannot delete recipe. It is associated with one or more products.",
-        });
+      return res.status(400).json({
+        error:
+          "Cannot delete recipe. It is associated with one or more products.",
+      });
     }
 
     // Soft delete the recipe by updating its status to DELETED

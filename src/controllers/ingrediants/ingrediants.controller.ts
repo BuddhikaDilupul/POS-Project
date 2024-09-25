@@ -29,7 +29,7 @@ export const getAllIngredients = async (req: Request, res: Response) => {
       status: { $ne: Status.DELETED },
     }).select(
       "_id name"
-    );;
+    );
     res.status(200).json(ingredients);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
