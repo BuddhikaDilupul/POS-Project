@@ -24,6 +24,8 @@ const corsOptions: cors.CorsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
+// Serve Swagger documentation at /api-docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // JWT middleware (if using JWT auth)
 app.use(authJwt());
 
@@ -38,9 +40,6 @@ const limiter = rateLimit({
 
 // Apply the rate limiter to all requests
 app.use(limiter);
-
-// Serve Swagger documentation at /api-docs
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Main routes
 app.use("/api", apiRoutes);
