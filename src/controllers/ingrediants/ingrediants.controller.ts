@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import IngredientsModel from "../../models/ingredients/ingredients.model";
+import { Status } from "../../types/type";
 
 // Create a new ingredient
 export const createIngredient = async (req: Request, res: Response) => {
@@ -24,7 +25,11 @@ export const createIngredient = async (req: Request, res: Response) => {
 // Get all ingredients
 export const getAllIngredients = async (req: Request, res: Response) => {
   try {
-    const ingredients = await IngredientsModel.find();
+    const ingredients = await IngredientsModel.find({
+      status: { $ne: Status.DELETED },
+    }).select(
+      "_id name"
+    );;
     res.status(200).json(ingredients);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
