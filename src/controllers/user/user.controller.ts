@@ -150,12 +150,11 @@ const updatePassword = async (
 
     // Hash the new password
     const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
-    if ( req.userId) {
-
-    // Update the user member's password
-    user.password = hashedNewPassword;
-    user.lastUpdatedBy = new mongoose.Types.ObjectId(req.userId);
-    await user.save();
+    if (req.userId) {
+      // Update the user member's password
+      user.password = hashedNewPassword;
+      user.lastUpdatedBy = new mongoose.Types.ObjectId(req.userId);
+      await user.save();
     }
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
@@ -194,11 +193,9 @@ const updateUserDetails = async (
 
       const emailInUse = await UserModel.findOne({ email: email });
       if (emailInUse && emailInUse.email !== email) {
-        res
-          .status(400)
-          .json({
-            message: "Email is already in use by another user member.",
-          });
+        res.status(400).json({
+          message: "Email is already in use by another user member.",
+        });
       }
 
       user.firstName = firstName || user.firstName;

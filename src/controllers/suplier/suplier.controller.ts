@@ -33,7 +33,9 @@ const getAllSupliers = async (req: Request, res: Response) => {
   try {
     const supliers = await SuplierModel.find({
       status: { $ne: UserStatus.DELETED },
-    });
+    }).select(
+      "_id name"
+    );;
     res.status(200).json(supliers);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
