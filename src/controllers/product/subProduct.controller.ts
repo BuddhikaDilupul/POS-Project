@@ -5,7 +5,13 @@ import { ProductStatus, Status } from "../../types/type";
 
 // Create a new sub-product
 export const createSubProduct = async (req: Request, res: Response) => {
-  const { name, inStockQuantity, purchasedCost, sellingPrice, availabilityStatus } = req.body;
+  const {
+    name,
+    inStockQuantity,
+    purchasedCost,
+    sellingPrice,
+    availabilityStatus,
+  } = req.body;
   const lastUpdatedBy = req.userId; // Assuming userId is attached to the request object
 
   try {
@@ -21,17 +27,23 @@ export const createSubProduct = async (req: Request, res: Response) => {
     const savedSubProduct = await newSubProduct.save();
     res.status(201).json(savedSubProduct);
   } catch (error: any) {
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 };
 
 // Get all sub-products
 export const getAllSubProducts = async (req: Request, res: Response) => {
   try {
-    const subProducts = await SubProductModel.find({ status: { $ne: Status.DELETED } });
+    const subProducts = await SubProductModel.find({
+      status: { $ne: Status.DELETED },
+    });
     res.status(200).json(subProducts);
-  } catch (error:any) {
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 };
 
@@ -45,15 +57,18 @@ export const getSubProductById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "SubProduct not found" });
     }
     res.status(200).json(subProduct);
-  } catch (error:any) {
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 };
 
 // Update a sub-product
 export const updateSubProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, inStockQuantity, purchasedCost, sellingPrice, status, availabilityStatus } = req.body;
+  const { name, inStockQuantity, purchasedCost, status, availabilityStatus } =
+    req.body;
   const lastUpdatedBy = req.userId;
 
   try {
@@ -63,7 +78,6 @@ export const updateSubProduct = async (req: Request, res: Response) => {
         name,
         inStockQuantity,
         purchasedCost,
-        sellingPrice,
         status,
         availabilityStatus,
         lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
@@ -76,8 +90,10 @@ export const updateSubProduct = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(updatedSubProduct);
-  } catch (error:any) {
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 };
 
@@ -97,6 +113,8 @@ export const deleteSubProduct = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "SubProduct deleted successfully" });
   } catch (error: any) {
-    res.status(500).json({ error: "Internal Server Error", details: error.message });
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 };

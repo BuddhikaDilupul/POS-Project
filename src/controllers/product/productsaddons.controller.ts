@@ -37,7 +37,7 @@ export const getAllProductAddons = async (req: Request, res: Response) => {
 
 // Get a product addon by ID
 export const getProductAddonById = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   try {
     const productAddon = await ProductAddonModel.findById(id)
