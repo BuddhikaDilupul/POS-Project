@@ -1,9 +1,10 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ProductStatus, Status } from "../../types/type";
+import { IRecipe } from "models/recipe/recipe.model";
 
 // Define the product interface
 export interface IProduct extends Document {
-  recipeId: mongoose.Types.ObjectId;
+  recipeId: mongoose.Types.ObjectId | IRecipe;
   categoryId: mongoose.Types.ObjectId;
   description: string;
   sellingPrice: number;

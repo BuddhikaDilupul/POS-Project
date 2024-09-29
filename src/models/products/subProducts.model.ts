@@ -4,6 +4,7 @@ import { ProductStatus, Status } from "../../types/type";
 // Define the sub-product interface
 export interface ISubProduct extends Document {
   name: string;
+  initialStockCount: number;
   inStockQuantity: number;
   purchasedCost: number;
   sellingPrice: number;
@@ -16,6 +17,7 @@ export interface ISubProduct extends Document {
 const SubProductSchema = new Schema<ISubProduct>(
   {
     name: { type: String, required: true },
+    initialStockCount: { type: Number, required: true },
     inStockQuantity: { type: Number, required: true },
     purchasedCost: { type: Number, required: true },
     sellingPrice: { type: Number, required: true },

@@ -23,6 +23,7 @@ const createStock = async (req: Request, res: Response) => {
       name,
       suplierId: new mongoose.Types.ObjectId(suplierId), // Adding supplier ID
       ingredientId: new mongoose.Types.ObjectId(ingredientId),
+      initialStockCount: inStockCount,
       inStockCount,
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK if not provided
       unitPrice,
@@ -78,6 +79,36 @@ const getStockById = async (req: Request, res: Response) => {
   }
 };
 
+// Close stock and change instock counts to damadge
+const closeStock = async (req: Request, res: Response) => {
+  const { stockId } = req.params;
+
+  try {
+    // Find the stock item by ID
+    const stock = await StockModel.findById(stockId);
+    if (!stock) {
+      return res.status(404).json({ message: "Stock item not found" });
+    }
+
+    // Set availabilityStatus to CLOSED
+    stock.availabilityStatus = ProductStatus.OUT_OF_STOCK;
+
+    // Convert inStockCount to damagedCount
+    stock.damadgedCount += stock.inStockCount; // Adjust the typo if needed
+    stock.inStockCount = 0; // Set inStockCount to 0
+    stock.loss = (stock.damadgedCount + stock.inStockCount) * stock.unitPrice; // Set inStockCount to 0
+
+    // Save the updated stock item
+    await stock.save();
+
+    return res
+      .status(200)
+      .json({ message: "Stock item closed successfully", stock });
+  } catch (error) {
+    return res.status(500).json({ message: "Error closing stock item", error });
+  }
+};
+
 // Update a stock
 const updateStock = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -88,6 +119,8 @@ const updateStock = async (req: Request, res: Response) => {
     availabilityStatus,
     status,
     unitPrice,
+    damadgedCount,
+    usedStockCount,
     unitType,
     expireDate,
   } = req.body;
@@ -101,6 +134,14 @@ const updateStock = async (req: Request, res: Response) => {
   if (ingredientId && !mongoose.Types.ObjectId.isValid(ingredientId)) {
     return res.status(400).json({ error: "Invalid ingredient ID" });
   }
+  // Validate stock
+  const stockCheck = await StockModel.findById(id);
+  if (
+    damadgedCount + inStockCount + usedStockCount !==
+    stockCheck?.initialStockCount
+  ) {
+    return res.status(400).json({ error: "Stock counts are mismatching" });
+  }
 
   try {
     const updatedStock = await StockModel.findByIdAndUpdate(
@@ -111,6 +152,8 @@ const updateStock = async (req: Request, res: Response) => {
           ? new mongoose.Types.ObjectId(ingredientId)
           : undefined, // Convert if provided
         inStockCount,
+        usedStockCount,
+        damadgedCount,
         availabilityStatus,
         status,
         unitPrice,
@@ -205,5 +248,6 @@ export default {
   getAllStocks,
   getStockById,
   updateStock,
+  closeStock,
   deleteStock,
 };

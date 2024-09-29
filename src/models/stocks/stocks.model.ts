@@ -6,9 +6,11 @@ export interface IStocks extends Document {
   name: string;
   suplierId: mongoose.Types.ObjectId;
   ingredientId: mongoose.Types.ObjectId;
+  initialStockCount: number;
+  usedStockCount: number;
   inStockCount: number;
-  damadgedCount?: number;
-  loss?: number;
+  damadgedCount: number;
+  loss: number;
   availabilityStatus: ProductStatus;
   status: Status;
   unitPrice: number;
@@ -39,7 +41,9 @@ const StockSchema = new Schema<IStocks>(
     },
     loss: { type: Number, default: 0 },
     damadgedCount: { type: Number, default: 0 },
+    initialStockCount: { type: Number, required: true },
     inStockCount: { type: Number, required: true },
+    usedStockCount: { type: Number, default:0 },
     suplierId: { type: Schema.Types.ObjectId, required: true, ref: "Suplier" },
     availabilityStatus: {
       type: String,

@@ -18,6 +18,7 @@ export const createSubProduct = async (req: Request, res: Response) => {
     const newSubProduct = new SubProductModel({
       name,
       inStockQuantity,
+      initialStockCount: inStockQuantity,
       purchasedCost,
       sellingPrice,
       availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK
@@ -37,7 +38,8 @@ export const createSubProduct = async (req: Request, res: Response) => {
 export const getAllSubProducts = async (req: Request, res: Response) => {
   try {
     const subProducts = await SubProductModel.find({
-      status: { $ne: Status.DELETED },
+      status: { $ne: Status.DELETED &&  Status.CLOSED },
+
     });
     res.status(200).json(subProducts);
   } catch (error: any) {
