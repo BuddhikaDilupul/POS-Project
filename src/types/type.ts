@@ -3,6 +3,7 @@ export enum StaffRoles {
     ADMIN = "ADMIN",
     CASHIER = "CASHIER",
     MANAGER = "MANAGER",
+    CHEF = "CHEF"
   }
   
 // An enum for staff EmploymentType
