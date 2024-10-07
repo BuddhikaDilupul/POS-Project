@@ -4,10 +4,10 @@ import jwt from "jsonwebtoken";
 import config from "../../../config";
 import { IUser } from "../../models/user/user.model";
 import { IUser_Custom } from "types/interfaces";
-import { encryptNIC, decryptNIC } from "../../helpers/encryption";
 import mongoose from "mongoose";
 import UserModel from "../../models/user/user.model";
 import timeConverterToSLTime from "../../helpers/dateTime";
+
 // Constants
 const SALT_ROUNDS = 10;
 
@@ -18,7 +18,6 @@ const createUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const userData: IUser = req.body;
     const {
       firstName,
       lastName,
@@ -94,7 +93,7 @@ const login = async (
           username: user.username,
         },
         secret,
-        { expiresIn: "30m" }
+        { expiresIn: "1d" }
       );
       // Update lastLogin and currentLogin
       const currentDate = new Date();
@@ -266,12 +265,12 @@ const getUserById = async (
 
     // Fetch the user member by ID
     const user: IUser_Custom | null = await UserModel.findById(id)
-    .populate('lastUpdatedBy', 'username')
-    .select('-password');
-  
+      .populate("lastUpdatedBy", "username")
+      .select("-password");
+
     if (user) {
       console.log(user);
-      
+
       const data = {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -283,8 +282,10 @@ const getUserById = async (
         employmentType: user.employmentType,
         role: user.role,
         createdAt: timeConverterToSLTime(user.createdAt),
-        lastLogin: timeConverterToSLTime(user.lastLogin || new Date(-1)),
-        curruntLogin: timeConverterToSLTime(user.currentLogin || new Date(-1)),
+        lastLogin: user.lastLogin ? timeConverterToSLTime(user.lastLogin) : -1,
+        curruntLogin: user.lastLogin
+          ? timeConverterToSLTime(user.currentLogin)
+          : -1,
       };
       res.status(200).json(data); // Send the result back
     }
