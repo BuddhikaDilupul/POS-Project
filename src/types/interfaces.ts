@@ -3,8 +3,9 @@ import { EmploymentTypeStaff, Gender, StaffRoles } from "./type";
 // Define the User interface
 export interface IUser_Custom extends Document {
   _id: string;
-  firstName: string | null;
+  firstName: string;
   lastName: string;
+  username: string;
   gender: Gender;
   address: string;
   contactNumber: string;

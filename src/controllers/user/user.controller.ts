@@ -270,6 +270,7 @@ const getUserById = async (
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
+        username: user.username,
         gender: user.gender,
         address: user.address,
         contactNumber: user.contactNumber,
