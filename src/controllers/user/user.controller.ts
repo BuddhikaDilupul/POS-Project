@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
-import { IUser } from "../../models/user/user.model";
 import { IUser_Custom } from "types/interfaces";
 import mongoose from "mongoose";
 import UserModel from "../../models/user/user.model";
@@ -111,6 +110,40 @@ const login = async (
           lastLogin: timeConverterToSLTime(updatedUser.lastLogin),
           curruntLogin: timeConverterToSLTime(updatedUser.currentLogin),
         });
+      } else {
+        res.status(400).send("Somthing went wrong!");
+      }
+    } else {
+      res.status(400).send("Password is wrong!");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Controller function to login a user member
+const viewCrediantils = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id, password } = req.body;
+
+    // Fetch the user from MongoDB
+    const user = await UserModel.findById(req.userId);
+
+    if (!user) {
+      res.status(404).send("User not found!!");
+      return;
+    }
+
+    // Compare the password with the hashed password in MongoDB
+    if (bcrypt.compareSync(password, user.password)) {
+      // Update lastLogin and currentLogin
+      const data = await UserModel.findById(id).select('password');
+      if (data) {
+        res.status(200).send(data);
       } else {
         res.status(400).send("Somthing went wrong!");
       }

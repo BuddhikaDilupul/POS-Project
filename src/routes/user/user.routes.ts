@@ -22,9 +22,16 @@ router.post(
   validate(userValidation.login),
   userController.login
 );
-router.post(
+router.put(
   "/password",
   validate(userValidation.passwordChange),
+  authenticate,
+  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
+  userController.updatePassword
+);
+router.post(
+  "/view-credentials",
+  validate(userValidation.viewCredentials),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
   userController.updatePassword
