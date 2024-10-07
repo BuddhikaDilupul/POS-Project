@@ -68,10 +68,10 @@ const login = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Fetch the user from MongoDB
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ username });
 
     if (!user) {
       res.status(404).send("User not found!!");
@@ -88,10 +88,10 @@ const login = async (
           id: user._id,
           role: user.role,
           email: user.email,
-          username: `${user.firstName} ${user.lastName}`,
+          username: user.username,
         },
         secret,
-        { expiresIn: "1d" }
+        { expiresIn: "5m" }
       );
       // Update lastLogin and currentLogin
       const currentDate = new Date();

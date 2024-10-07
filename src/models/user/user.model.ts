@@ -10,6 +10,7 @@ export interface IUser extends Document {
   contactNumber: string;
   joinedDate: Date;
   email: string;
+  username: string;
   password: string;
   employmentType: EmploymentTypeStaff;
   role: StaffRoles;
@@ -31,6 +32,7 @@ const UserSchema = new Schema<IUser>(
     contactNumber: { type: String, required: true },
     joinedDate: { type: Date, required: true },
     email: { type: String, unique: true, required: true },
+    username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     employmentType: {
       type: String,
