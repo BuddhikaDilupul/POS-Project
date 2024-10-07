@@ -176,8 +176,8 @@ const updateUserDetails = async (
       gender,
       address,
       contactNumber,
-      nic,
       employmentType,
+      status
     } = req.body;
     const email = req.email;
 
@@ -185,14 +185,6 @@ const updateUserDetails = async (
     const user = await UserModel.findOne({ email });
 
     if (user) {
-      // Check if NIC or email is in use by another user member
-      const nicInUse = await UserModel.findOne({ nic });
-      if (nicInUse && nicInUse.email !== email) {
-        res
-          .status(400)
-          .json({ message: "NIC is already in use by another user member." });
-      }
-
       const emailInUse = await UserModel.findOne({ email: email });
       if (emailInUse && emailInUse.email !== email) {
         res.status(400).json({
@@ -202,6 +194,7 @@ const updateUserDetails = async (
 
       user.firstName = firstName || user.firstName;
       user.lastName = lastName || user.lastName;
+      user.status = status || user.status;
       user.gender = gender || user.gender;
       user.address = address || user.address;
       user.contactNumber = contactNumber || user.contactNumber;
