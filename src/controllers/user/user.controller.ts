@@ -122,7 +122,7 @@ const login = async (
   }
 };
 
-// Controller function to update password
+// Controller function to update password user him/ her self
 const updatePassword = async (
   req: Request,
   res: Response,
@@ -164,6 +164,7 @@ const updatePassword = async (
   }
 };
 
+// update user's details by manager
 const updateUserDetails = async (
   req: Request,
   res: Response,
@@ -171,18 +172,18 @@ const updateUserDetails = async (
 ): Promise<void> => {
   try {
     const {
+      email,
       firstName,
       lastName,
       gender,
       address,
       contactNumber,
       employmentType,
-      status
+      status,
     } = req.body;
-    const email = req.email;
-
+    const id = req.params.id;
     // Fetch the user member by email
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findById(id);
 
     if (user) {
       const emailInUse = await UserModel.findOne({ email: email });
@@ -194,6 +195,7 @@ const updateUserDetails = async (
 
       user.firstName = firstName || user.firstName;
       user.lastName = lastName || user.lastName;
+      user.email = email || user.email;
       user.status = status || user.status;
       user.gender = gender || user.gender;
       user.address = address || user.address;
@@ -265,6 +267,7 @@ const getUserById = async (
       console.log(user);
 
       const data = {
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         gender: user.gender,
