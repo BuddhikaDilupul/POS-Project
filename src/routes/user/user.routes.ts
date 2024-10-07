@@ -36,7 +36,7 @@ router.get(
   userController.getAllUser
 );
 router.put(
-  "/",
+  "/:id",
   validate(userValidation.updateUser),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
