@@ -14,6 +14,7 @@ const userValidation = {
       joinedDate: Joi.date().optional(),
       // nic: Joi.string().length(10).required(), // Assuming NIC is exactly 10 characters; adjust length if different
       email: Joi.string().required(),
+      username: Joi.string().required(),
       employmentType: Joi.string().valid(...Object.values(EmploymentTypeStaff)).required(), // Use EmploymentType enum
     }),
   },

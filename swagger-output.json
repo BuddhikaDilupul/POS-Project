@@ -80,7 +80,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "username": {
                   "example": "any"
                 },
                 "password": {
@@ -1660,6 +1660,12 @@
                   "example": "any"
                 },
                 "unitPrice": {
+                  "example": "any"
+                },
+                "damadgedCount": {
+                  "example": "any"
+                },
+                "usedStockCount": {
                   "example": "any"
                 },
                 "unitType": {
