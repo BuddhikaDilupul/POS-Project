@@ -7,6 +7,7 @@ import { IUser_Custom } from "types/interfaces";
 import { encryptNIC, decryptNIC } from "../../helpers/encryption";
 import mongoose from "mongoose";
 import UserModel from "../../models/user/user.model";
+import timeConverterToSLTime from "../../helpers/dateTime";
 // Constants
 const SALT_ROUNDS = 10;
 
@@ -108,8 +109,8 @@ const login = async (
       if (updatedUser && token) {
         res.status(200).send({
           token,
-          lastLogin: updatedUser.lastLogin,
-          curruntLogin: updatedUser.currentLogin,
+          lastLogin: timeConverterToSLTime(updatedUser.lastLogin),
+          curruntLogin: timeConverterToSLTime(updatedUser.currentLogin),
         });
       } else {
         res.status(400).send("Somthing went wrong!");
