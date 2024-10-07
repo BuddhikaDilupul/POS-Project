@@ -3,7 +3,7 @@ import { EmploymentTypeStaff, Gender, StaffRoles, Status } from "../../types/typ
 
 // Define the Staff interface
 export interface IUser extends Document {
-  firstName: string | null;
+  firstName: string;
   lastName: string;
   gender: Gender;
   address?: string;
@@ -15,8 +15,8 @@ export interface IUser extends Document {
   employmentType: EmploymentTypeStaff;
   role: StaffRoles;
   status: Status;
-  lastLogin?: Date;
-  currentLogin?: Date;
+  lastLogin: Date;
+  currentLogin: Date;
   lastUpdatedBy?: mongoose.Types.ObjectId;
 }
 
