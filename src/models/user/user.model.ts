@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { EmploymentTypeStaff, Gender, StaffRoles } from "../../types/type";
+import { EmploymentTypeStaff, Gender, StaffRoles, Status } from "../../types/type";
 
 // Define the Staff interface
 export interface IUser extends Document {
@@ -13,6 +13,7 @@ export interface IUser extends Document {
   password: string;
   employmentType: EmploymentTypeStaff;
   role: StaffRoles;
+  status: Status;
   lastLogin?: Date;
   currentLogin?: Date;
   lastUpdatedBy?: mongoose.Types.ObjectId;
@@ -25,6 +26,7 @@ const UserSchema = new Schema<IUser>(
     lastName: { type: String, required: true },
     gender: { type: String, enum: Object.values(Gender), required: true },
     role: { type: String, enum: Object.values(StaffRoles), required: true },
+    status: { type: String, enum: Object.values(Status), default: Status.ACTIVE },
     address: { type: String },
     contactNumber: { type: String, required: true },
     joinedDate: { type: Date, required: true },

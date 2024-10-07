@@ -5,7 +5,6 @@ import { Status } from "../../types/type";
 export interface ICashInHand extends Document {
   cash: number;
   status: Status;
-  date: Date;
   lastUpdatedBy: mongoose.Types.ObjectId;
 }
 
