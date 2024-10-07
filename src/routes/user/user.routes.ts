@@ -14,7 +14,7 @@ router.post(
   "/create",
   validate(userValidation.createUser),
   authenticate,
-  authorize([StaffRoles.ADMIN]),
+  authorize([StaffRoles.ADMIN, StaffRoles.ADMIN]),
   userController.createUser
 );
 router.post(
@@ -29,13 +29,14 @@ router.put(
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
   userController.updatePassword
 );
-router.post(
-  "/view-credentials",
-  validate(userValidation.viewCredentials),
+router.put(
+  "/updateCredentials",
+  validate(userValidation.updateCredentials),
   authenticate,
-  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  userController.updatePassword
+  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
+  userController.updatedCredentials
 );
+
 router.get(
   "/all",
   authenticate,
@@ -46,13 +47,13 @@ router.put(
   "/:id",
   validate(userValidation.updateUser),
   authenticate,
-  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
+  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
   userController.updateUserDetails
 );
 router.get(
   "/:id",
   authenticate,
-  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.ADMIN]),
+  authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
   userController.getUserById
 );
 

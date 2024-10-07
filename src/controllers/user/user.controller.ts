@@ -122,33 +122,34 @@ const login = async (
 };
 
 // Controller function to login a user member
-const viewCrediantils = async (
+const updatedCredentials = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { id, password } = req.body;
+    const { superUserPassword, newPassword, id } = req.body;
 
-    // Fetch the user from MongoDB
-    const user = await UserModel.findById(req.userId);
+    // Fetch the user member from MongoDB
+    const user = await UserModel.findOne({ email: req.email });
 
     if (!user) {
       res.status(404).send("User not found!!");
       return;
     }
 
-    // Compare the password with the hashed password in MongoDB
-    if (bcrypt.compareSync(password, user.password)) {
-      // Update lastLogin and currentLogin
-      const data = await UserModel.findById(id).select('password');
-      if (data) {
-        res.status(200).send(data);
-      } else {
-        res.status(400).send("Somthing went wrong!");
-      }
+    if (bcrypt.compareSync(superUserPassword, user.password)) {
+      // Validate the current password
+      const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+      const updatedUser = await UserModel.findByIdAndUpdate(id, {
+        password: hashedPassword,
+      });
+      res.status(200).json({
+        message: `Password updated successfully for ${updatedUser?.username}`,
+      });
     } else {
-      res.status(400).send("Password is wrong!");
+      res.status(400).send("Current password is incorrect!");
+      return;
     }
   } catch (error) {
     next(error);
@@ -337,4 +338,5 @@ export default {
   updateUserDetails,
   getAllUser,
   getUserById,
+  updatedCredentials,
 };

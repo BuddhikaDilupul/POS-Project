@@ -41,10 +41,11 @@ const userValidation = {
       newPassword: Joi.string().min(8).required(),
     }),
   },
-  viewCredentials: {
+  updateCredentials: {
     body: Joi.object({
       id: Joi.string().required(),
-      password: Joi.string().min(8).required(),
+      newPassword: Joi.string().min(8).required(),
+      superUserPassword: Joi.string().min(8).required(),
     }),
   },
 };
