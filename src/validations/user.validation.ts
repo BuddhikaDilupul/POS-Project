@@ -43,8 +43,8 @@ const userValidation = {
   },
   updateCredentials: {
     body: Joi.object({
-      id: Joi.string().required(),
-      newPassword: Joi.string().min(8).required(),
+      minorUserId: Joi.string().required(),
+      minorUserNewPassword: Joi.string().min(8).required(),
       superUserPassword: Joi.string().min(8).required(),
     }),
   },

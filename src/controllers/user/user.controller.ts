@@ -128,7 +128,7 @@ const updatedCredentials = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { superUserPassword, newPassword, id } = req.body;
+    const { superUserPassword, minorUserNewPassword, minorUserId } = req.body;
 
     // Fetch the user member from MongoDB
     const user = await UserModel.findOne({ email: req.email });
@@ -140,8 +140,8 @@ const updatedCredentials = async (
 
     if (bcrypt.compareSync(superUserPassword, user.password)) {
       // Validate the current password
-      const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
-      const updatedUser = await UserModel.findByIdAndUpdate(id, {
+      const hashedPassword = await bcrypt.hash(minorUserNewPassword, SALT_ROUNDS);
+      const updatedUser = await UserModel.findByIdAndUpdate(minorUserId, {
         password: hashedPassword,
       });
       res.status(200).json({
