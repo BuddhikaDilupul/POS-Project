@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { EmploymentTypeStaff, Gender, StaffRoles } from '../types/type';
+import { EmploymentTypeStaff, Gender, StaffRoles, Status } from '../types/type';
 
 const userValidation = {
   createUser: {
@@ -12,7 +12,6 @@ const userValidation = {
       address: Joi.string().optional(),
       contactNumber: Joi.string().required(), // Adjust pattern as needed
       joinedDate: Joi.date().optional(),
-      // nic: Joi.string().length(10).required(), // Assuming NIC is exactly 10 characters; adjust length if different
       email: Joi.string().required(),
       username: Joi.string().required(),
       employmentType: Joi.string().valid(...Object.values(EmploymentTypeStaff)).required(), // Use EmploymentType enum
@@ -22,12 +21,11 @@ const userValidation = {
     body: Joi.object({
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
-      // dateOfBirth: Joi.date().optional(),
       gender: Joi.string().valid(...Object.values(Gender)).required(), // Use Gender enum
+      status: Joi.string().valid(...Object.values(Status)).required(), // Use Status enum
       address: Joi.string().optional(),
       contactNumber: Joi.string().required(), // Adjust pattern as needed
-      // nic: Joi.string().length(10).optional(), // Assuming NIC is exactly 10 characters; adjust length if different
-      // email: Joi.string().email().forbidden(),
+      email: Joi.string().email().required(),
       employmentType: Joi.string().valid(...Object.values(EmploymentTypeStaff)).required(), // Use EmploymentType enum
     }),
   },
