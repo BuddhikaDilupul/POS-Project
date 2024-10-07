@@ -5,16 +5,16 @@ export interface IUser_Custom extends Document {
     firstName: string | null;
     lastName: string;
     gender: Gender;
-    address?: string;
+    address: string;
     contactNumber: string;
     joinedDate: Date;
     email?: string;
     employmentType: EmploymentTypeStaff;
     role: StaffRoles;
-    createdAt?: Date;
-    lastUpdatedAt?: Date;
-    lastLogin?: Date;
-    currentLogin?: Date;
+    createdAt: Date;
+    lastUpdatedAt: Date;
+    lastLogin: Date;
+    currentLogin: Date;
     lastUpdatedBy?: string;
   }
   
