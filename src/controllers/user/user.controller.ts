@@ -228,12 +228,13 @@ const getAllUser = async (
   try {
     // Get the page number from the query parameters, default to 1 if not provided
     const page: number = parseInt(req.query.page as string) || 1;
-    const limit: number = 5; // Set limit to 5 records per page
+    const limit: number = 15; // Set limit to 5 records per page
     const skip: number = (page - 1) * limit; // Calculate the number of records to skip
 
     // Fetch users with pagination
     const users = await UserModel.find()
-      .select("_id firstName lastName role status") // Ensure to select necessary fields
+      .select("_id firstName lastName username role status")
+      .sort({ username: 1 }) // Ensure to select necessary fields
       .skip(skip) // Skip the records based on page number
       .limit(limit); // Limit the records to the specified amount
 
@@ -264,11 +265,28 @@ const getUserById = async (
     const { id } = req.params;
 
     // Fetch the user member by ID
-    const user: IUser_Custom | null = await UserModel.findById(id).select(
-      "-password"
-    );
+    const user: IUser_Custom | null = await UserModel.findById(id)
+    .populate('lastUpdatedBy', 'username')
+    .select('-password');
+  
     if (user) {
-      res.status(200).json(user); // Send the result back
+      console.log(user);
+      
+      const data = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        gender: user.gender,
+        address: user.address,
+        contactNumber: user.contactNumber,
+        joinedDate: user.joinedDate,
+        email: user.email,
+        employmentType: user.employmentType,
+        role: user.role,
+        createdAt: timeConverterToSLTime(user.createdAt),
+        lastLogin: timeConverterToSLTime(user.lastLogin || new Date(-1)),
+        curruntLogin: timeConverterToSLTime(user.currentLogin || new Date(-1)),
+      };
+      res.status(200).json(data); // Send the result back
     }
 
     if (!user) {
