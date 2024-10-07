@@ -34,7 +34,7 @@ const userValidation = {
   login: {
     body: Joi.object({
       password: Joi.string().min(8).required(),
-      email: Joi.string().required(),
+      username: Joi.string().required(),
     }),
   },
   passwordChange: {
