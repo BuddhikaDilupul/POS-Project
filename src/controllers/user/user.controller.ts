@@ -94,7 +94,7 @@ const login = async (
           username: user.username,
         },
         secret,
-        { expiresIn: "5m" }
+        { expiresIn: "30m" }
       );
       // Update lastLogin and currentLogin
       const currentDate = new Date();
@@ -220,17 +220,35 @@ const updateUserDetails = async (
   }
 };
 
-// Controller to get all user members
 const getAllUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const users: IUser_Custom[] | null = await UserModel.find().select(
-      "_id firstName lastName" // Select only _id, firstName, and lastName fields
-    );
-    res.status(200).json(users);
+    // Get the page number from the query parameters, default to 1 if not provided
+    const page: number = parseInt(req.query.page as string) || 1;
+    const limit: number = 5; // Set limit to 5 records per page
+    const skip: number = (page - 1) * limit; // Calculate the number of records to skip
+
+    // Fetch users with pagination
+    const users = await UserModel.find()
+      .select("_id firstName lastName role status") // Ensure to select necessary fields
+      .skip(skip) // Skip the records based on page number
+      .limit(limit); // Limit the records to the specified amount
+
+    // Type assertion to IUser_Custom[]
+    const typedUsers: IUser_Custom[] = users as unknown as IUser_Custom[];
+
+    // Fetch the total count of users for pagination info
+    const totalUsers: number = await UserModel.countDocuments();
+
+    res.status(200).json({
+      page,
+      totalPages: Math.ceil(totalUsers / limit), // Calculate total pages
+      totalUsers,
+      data: typedUsers, // Return the fetched users
+    });
   } catch (error) {
     next(error);
   }
