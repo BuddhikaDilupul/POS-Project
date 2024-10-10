@@ -11,6 +11,7 @@ export interface IUser_Custom extends Document {
   contactNumber: string;
   joinedDate: Date;
   email?: string;
+  status?: string;
   employmentType: EmploymentTypeStaff;
   role: StaffRoles;
   createdAt: Date;

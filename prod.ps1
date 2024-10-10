@@ -1,3 +1,4 @@
+npm run build
 # Pre-start npm script (optional; make sure this is intended)
 npm run swagger-autogen
 

@@ -310,6 +310,7 @@ const getUserById = async (
         contactNumber: user.contactNumber,
         joinedDate: user.joinedDate,
         email: user.email,
+        status: user.status,
         employmentType: user.employmentType,
         role: user.role,
         createdAt: timeConverterToSLTime(user.createdAt),

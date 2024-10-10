@@ -13,7 +13,8 @@
     "noEmitOnError": true // Prevents emitting files if any type checking errors are reported
   },
   "include": [
-    "./**/*.ts" // Include all TypeScript files in the project
+    "./**/*.ts", // Include all TypeScript files in the project
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules", // Exclude node_modules folder
