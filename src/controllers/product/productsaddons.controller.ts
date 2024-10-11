@@ -4,7 +4,7 @@ import ProductAddonModel from "../../models/products/productsaddons.model";
 import { Status, ProductStatus } from "../../types/type";
 
 // Create a new product addon
-export const createProductAddon = async (req: Request, res: Response) => {
+const createProductAddon = async (req: Request, res: Response) => {
   const { stockId, ingredientsId, sellingQuantity, sellingPrice, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId; // assuming `userId` is attached to the request
 
@@ -26,7 +26,7 @@ export const createProductAddon = async (req: Request, res: Response) => {
 };
 
 // Get all product addons
-export const getAllProductAddons = async (req: Request, res: Response) => {
+const getAllProductAddons = async (req: Request, res: Response) => {
   try {
     const productAddons = await ProductAddonModel.find({ status: { $ne: Status.DELETED } });
     res.status(200).json(productAddons);
@@ -36,7 +36,7 @@ export const getAllProductAddons = async (req: Request, res: Response) => {
 };
 
 // Get a product addon by ID
-export const getProductAddonById = async (req: Request, res: Response) => {
+const getProductAddonById = async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
@@ -53,7 +53,7 @@ export const getProductAddonById = async (req: Request, res: Response) => {
 };
 
 // Update a product addon
-export const updateProductAddon = async (req: Request, res: Response) => {
+const updateProductAddon = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { stockId, ingredientsId, sellingQuantity, sellingPrice, status, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId;
@@ -84,7 +84,7 @@ export const updateProductAddon = async (req: Request, res: Response) => {
 };
 
 // Soft delete a product addon (change status to DELETED)
-export const deleteProductAddon = async (req: Request, res: Response) => {
+const deleteProductAddon = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -102,3 +102,11 @@ export const deleteProductAddon = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
 };
+
+export default {
+  createProductAddon,
+  getAllProductAddons,
+  getProductAddonById,
+  updateProductAddon,
+  deleteProductAddon,
+}
