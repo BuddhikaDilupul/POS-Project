@@ -15,8 +15,8 @@ export const createIngredient = async (req: Request, res: Response) => {
       lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
     });
 
-    const savedIngredient = await newIngredient.save();
-    res.status(201).json(savedIngredient);
+    const data = await newIngredient.save();
+    res.status(201).json({message:"Ingrediant Saved Successfully",data});
   } catch (error: any) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
@@ -28,7 +28,7 @@ export const getAllIngredients = async (req: Request, res: Response) => {
     const ingredients = await IngredientsModel.find({
       status: { $ne: Status.DELETED },
     }).select(
-      "_id name"
+      "_id name status unit"
     );
     res.status(200).json(ingredients);
   } catch (error) {
