@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ICashInHandModel from "../../models/cashInHand/cashInHand.model";
-import { Status } from "../../types/type";
+import { Status } from "../../utils/types/type";
 
 // Create a new cash entry
 const createCashInHand = async (req: Request, res: Response) => {

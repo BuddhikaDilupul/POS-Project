@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
-import categoryValidation from "../../validations/category.validation";
+import categoryValidation from "../../utils/validations/category.validation";
 import categoryController from "../../controllers/category/category.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
-import { StaffRoles } from "../../types/type";
+import { StaffRoles } from "../../utils/types/type";
 
 const router: Router = express.Router();
 

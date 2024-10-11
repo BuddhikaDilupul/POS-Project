@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ProductModel from "../../models/products/products.model";
-import { ProductStatus, Status } from "../../types/type";
+import { ProductStatus, Status } from "../../utils/types/type";
 import { uploadFile } from "../../middlewares/upload";
 const fs = require("fs");
 const util = require("util");

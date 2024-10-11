@@ -13,7 +13,7 @@
     "noEmitOnError": true, // Prevents emitting files if any type checking errors are reported
     "typeRoots": [
       "./node_modules/@types", // Default types
-      "./src/types" // Custom types directory
+      "src/utils/types" // Custom types directory
     ]
   },
   "include": [

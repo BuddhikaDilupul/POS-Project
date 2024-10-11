@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import IngredientsModel from "../../models/ingredients/ingredients.model";
-import { Status } from "../../types/type";
+import { Status } from "../../utils/types/type";
 
 // Create a new ingredient
 export const createIngredient = async (req: Request, res: Response) => {

@@ -1,12 +1,9 @@
-import multer from "multer";
-import multerS3 from "multer-s3";
 import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import path from "path";
-import { Request } from "express";
 import config from "../../config";
 import fs from "fs";
 const bucketName = config.bucket;

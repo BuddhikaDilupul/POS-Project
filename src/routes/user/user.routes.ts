@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import userController from "../../controllers/user/user.controller";
 import { validate } from "express-validation";
-import userValidation from "../../validations/user.validation";
+import userValidation from "../../utils/validations/user.validation";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
-import { StaffRoles } from "../../types/type";
+import { StaffRoles } from "../../utils/types/type";
 
 // Create a new router instance
 const router: Router = express.Router();

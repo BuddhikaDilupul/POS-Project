@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
-import recipeValidation from "../../validations/recipe.validation";
+import recipeValidation from "../../utils/validations/recipe.validation";
 import {
   createRecipe,
   getAllRecipes,
@@ -10,7 +10,7 @@ import {
 } from "../../controllers/recipe/recipe.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
-import { StaffRoles } from "../../types/type";
+import { StaffRoles } from "../../utils/types/type";
 
 const router: Router = express.Router();
 

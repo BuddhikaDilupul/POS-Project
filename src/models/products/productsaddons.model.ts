@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { ProductStatus, Status } from "../../types/type";
+import { ProductStatus, Status } from "../../utils/types/type";
 
 // Define the ProductAddons interface
 export interface IProductAddon extends Document {

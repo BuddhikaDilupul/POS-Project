@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { Status, Unit } from "../../types/type";
+import { Status, Unit } from "../../utils/types/type";
 
 // Define the recipe interface
 export interface IRecipe extends Document {

@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { UserStatus } from "../../types/type";
+import { UserStatus } from "../../utils/types/type";
 
 // Define the Customer interface
 export interface ICustomer extends Document {

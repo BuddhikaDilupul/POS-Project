@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
-import productValidation from "../../validations/product.validation";
+import productValidation from "../../utils/validations/product.validation";
 import productController from "../../controllers/product/product.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
-import { StaffRoles } from "../../types/type";
+import { StaffRoles } from "../../utils/types/type";
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 

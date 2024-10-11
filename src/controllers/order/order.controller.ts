@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import OrderModel from "../../models/order/order.model";
-import { OrderStatus, PaymentStatus } from "../../types/type";
+import { OrderStatus, PaymentStatus } from "../../utils/types/type";
 
 // Create a new order
 const createOrder = async (req: Request, res: Response) => {

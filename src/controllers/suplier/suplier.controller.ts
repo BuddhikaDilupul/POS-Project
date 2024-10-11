@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import SuplierModel from "../../models/suplier/suplier.model";
 import mongoose from "mongoose";
-import { UserStatus } from "../../types/type";
+import { UserStatus } from "../../utils/types/type";
 
 // Create a new supplier
 const createSuplier = async (req: Request, res: Response) => {

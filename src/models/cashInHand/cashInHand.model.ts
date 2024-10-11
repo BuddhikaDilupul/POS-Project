@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { Status } from "../../types/type";
+import { Status } from "../../utils/types/type";
 
 // Define the CashInHand interface
 export interface ICashInHand extends Document {

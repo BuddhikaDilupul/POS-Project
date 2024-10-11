@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import CustomerModel from "../../models/customer/customer.model";
 import mongoose from "mongoose";
-import { UserStatus } from "../../types/type";
+import { UserStatus } from "../../utils/types/type";
 
 // Create a new customer
 const createCustomer = async (req: Request, res: Response) => {

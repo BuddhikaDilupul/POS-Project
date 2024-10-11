@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { EmploymentTypeStaff, Gender, StaffRoles, Status, Unit } from "../../types/type";
+import { EmploymentTypeStaff, Gender, StaffRoles, Status, Unit } from "../../utils/types/type";
 
 // Define the Staff interface
 export interface IIngredients extends Document {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import RecipeModel from "../../models/recipe/recipe.model";
-import { Status } from "../../types/type";
+import { Status } from "../../utils/types/type";
 import ProductModel from "../../models/products/products.model";
 
 // Create a new recipe
@@ -16,8 +16,8 @@ export const createRecipe = async (req: Request, res: Response) => {
       lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
     });
 
-    const savedRecipe = await newRecipe.save();
-    res.status(201).json(savedRecipe);
+    const data = await newRecipe.save();
+    res.status(201).json({ message: "Successfully Saved!", data });
   } catch (error: any) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
@@ -26,10 +26,10 @@ export const createRecipe = async (req: Request, res: Response) => {
 // Get all recipes
 export const getAllRecipes = async (req: Request, res: Response) => {
   try {
-    const recipes = await RecipeModel.find({
+    const data = await RecipeModel.find({
       status: { $ne: Status.DELETED },
-    }).select("_id name");
-    res.status(200).json(recipes);
+    }).select("_id name status");
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }

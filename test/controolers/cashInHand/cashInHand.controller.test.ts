@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import sinon from 'sinon';
 import {app} from '../../../src/services/express'; // Import your Express app
 import ICashInHandModel from '../../../src/models/cashInHand/cashInHand.model';
-import { Status } from '.../../../src/types/type';
+import { Status } from 'utils/types/type';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
 describe('Cash In Hand Controller', () => {

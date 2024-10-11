@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { OrderStatus, PaymentMethod, PaymentStatus } from "../../types/type";
+import { OrderStatus, PaymentMethod, PaymentStatus } from "../../utils/types/type";
 
 // Define the interface for an order
 export interface IOrder extends Document {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import CategoryModel from "../../models/category/category.model";
-import { Status } from "../../types/type";
+import { Status } from "../../utils/types/type";
 import ProductModel from "../../models/products/products.model";
 
 // Create a new category

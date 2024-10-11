@@ -33,7 +33,7 @@ app.use(cors(corsOptions));
 // Rate limiter configuration
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 500, // Limit each IP to 500 requests per windowMs
+  max: 5000, // Limit each IP to 500 requests per windowMs
   message: "Too many requests from this IP, please try again after an hour.",
 });
 

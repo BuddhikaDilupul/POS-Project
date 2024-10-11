@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { ProductStatus, Status, Unit } from "../../types/type";
+import { ProductStatus, Status, Unit } from "../../utils/types/type";
 
 // Define the recipe interface
 export interface IStocks extends Document {

@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
-import cashInHandValidation from "../../validations/cashInHand.validation";
+import cashInHandValidation from "../../utils/validations/cashInHand.validation";
 import cashInHandController from "../../controllers/cashInHand/cashInHand.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
-import { StaffRoles } from "../../types/type";
+import { StaffRoles } from "../../utils/types/type";
 
 const router: Router = express.Router();
 

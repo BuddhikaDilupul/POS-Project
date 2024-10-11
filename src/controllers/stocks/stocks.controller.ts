@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import StockModel from "../../models/stocks/stocks.model";
-import { Status, ProductStatus } from "../../types/type";
+import { Status, ProductStatus } from "../../utils/types/type";
 import IngredientsModel from "../../models/ingredients/ingredients.model";
 
 // Create a new stock

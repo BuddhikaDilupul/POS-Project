@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
-import { IUser_Custom } from "types/interfaces";
+import { IUser_Custom } from "utils/types/interfaces";
 import mongoose from "mongoose";
 import UserModel from "../../models/user/user.model";
 import timeConverterToSLTime from "../../helpers/dateTime";
