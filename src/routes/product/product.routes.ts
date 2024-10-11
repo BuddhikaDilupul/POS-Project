@@ -1,26 +1,23 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
 import productValidation from "../../validations/product.validation";
-import {
-  createProduct,
-  getAllProducts,
-  getProductById,
-  updateProduct,
-  deleteProduct,
-} from "../../controllers/product/product.controller";
+import productController from "../../controllers/product/product.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
 import { StaffRoles } from "../../types/type";
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const router: Router = express.Router();
 
 // Create a new product
 router.post(
   "/create",
+  upload.single('imageFile'),
   validate(productValidation.createProduct),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
-  createProduct
+  productController.createProduct
 );
 
 // Get all products
@@ -28,13 +25,13 @@ router.get(
   "/all",
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  getAllProducts
+  productController.getAllProducts
 );
 router.get(
   "/getAllProductsCategoryWise",
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  getAllProducts
+  productController.getAllProducts
 );
 
 // Get product by ID
@@ -42,7 +39,7 @@ router.get(
   "/:id",
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  getProductById
+  productController.getProductById
 );
 
 // Update a product
@@ -51,7 +48,7 @@ router.put(
   validate(productValidation.updateProduct),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
-  updateProduct
+  productController.updateProduct
 );
 
 // Soft delete a product
@@ -59,7 +56,7 @@ router.delete(
   "/:id",
   authenticate,
   authorize([StaffRoles.ADMIN]),
-  deleteProduct
+  productController.deleteProduct
 );
 
 export default router;

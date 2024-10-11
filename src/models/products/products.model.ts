@@ -7,6 +7,7 @@ export interface IProduct extends Document {
   recipeId: mongoose.Types.ObjectId | IRecipe;
   categoryId: mongoose.Types.ObjectId;
   description: string;
+  imageUrl: string;
   sellingPrice: number;
   status: Status;
   availabilityStatus: ProductStatus;
@@ -23,6 +24,7 @@ const ProductSchema = new Schema<IProduct>(
       ref: "Category",
     },
     description: { type: String, required: true },
+    imageUrl: { type: String, required: true },
     sellingPrice: { type: Number, required: true },
     status: {
       type: String,

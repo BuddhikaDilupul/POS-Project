@@ -8,6 +8,7 @@ export interface ISubProduct extends Document {
   inStockQuantity: number;
   purchasedCost: number;
   sellingPrice: number;
+  imageUrl: string;
   status: Status;
   availabilityStatus: ProductStatus;
   lastUpdatedBy: mongoose.Types.ObjectId;
@@ -20,6 +21,7 @@ const SubProductSchema = new Schema<ISubProduct>(
     initialStockCount: { type: Number, required: true },
     inStockQuantity: { type: Number, required: true },
     purchasedCost: { type: Number, required: true },
+    imageUrl: { type: String, required: true },
     sellingPrice: { type: Number, required: true },
     status: {
       type: String,

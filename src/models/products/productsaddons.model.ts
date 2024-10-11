@@ -5,6 +5,7 @@ import { ProductStatus, Status } from "../../types/type";
 export interface IProductAddon extends Document {
   stockId: mongoose.Types.ObjectId;
   ingredientsId: mongoose.Types.ObjectId;
+  imageUrl: string;
   sellingQuantity: number;
   sellingPrice: number;
   status: Status;
@@ -18,6 +19,7 @@ const ProductAddonSchema = new Schema<IProductAddon>(
     stockId: { type: Schema.Types.ObjectId, required: true, ref: "Stocks" },
     ingredientsId: { type: Schema.Types.ObjectId, required: true, ref: "Ingredients" },
     sellingQuantity: { type: Number, required: true },
+    imageUrl: { type: String, required: true },
     sellingPrice: { type: Number, required: true },
     status: {
       type: String,

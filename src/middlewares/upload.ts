@@ -1,21 +1,75 @@
-import multer, { StorageEngine } from 'multer';
-import path from 'path';
-import { Request } from 'express';
+import multer from "multer";
+import multerS3 from "multer-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import path from "path";
+import { Request } from "express";
+import config from "../../config";
+import fs from "fs";
+const bucketName = config.bucket;
+const region = config.region;
+const accessKeyId = config.accessKeyId;
+const secretAccessKey = config.secretAccessKey;
 
-// Set up storage for file uploads
-const storage: StorageEngine = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
-    cb(null, 'uploads/');
+// Configure AWS S3
+const s3Client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
   },
-  filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+});
+
+// Helper function to determine content type
+const getContentType = (filename: string): string => {
+  const ext = path.extname(filename).toLowerCase();
+  switch (ext) {
+    case ".png":
+      return "image/png";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".gif":
+      return "image/gif";
+    default:
+      return "application/octet-stream"; // Fallback content type
   }
-});
+};
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // Limit file size to 50MB
-});
+// Uploads a file to S3
+export const uploadFile = async (file: Express.Multer.File): Promise<any> => {
+  const fileStream = fs.createReadStream(file.path);
 
-// Export the upload middleware
-export default upload;
+  // Use the original file name (or modify it as needed)
+  const originalFilename = path.basename(file.originalname);
+  const fileName = Math.floor(Date.now() / 1000) + originalFilename
+  const uploadParams = {
+    Bucket: bucketName,
+    Body: fileStream,
+    Key: fileName, // Set Key to include the original filename
+    ContentType: getContentType(originalFilename), // Set content type
+  };
+
+  const command = new PutObjectCommand(uploadParams);
+  await s3Client.send(command);
+  
+  return fileName; // Return the fileName
+};
+
+// Downloads a file from S3
+export const getFileStream = async (
+  fileKey: string
+): Promise<NodeJS.ReadableStream> => {
+  const downloadParams = {
+    Key: fileKey,
+    Bucket: bucketName,
+  };
+
+  const command = new GetObjectCommand(downloadParams);
+  const { Body } = await s3Client.send(command);
+
+  return Body as NodeJS.ReadableStream;
+};

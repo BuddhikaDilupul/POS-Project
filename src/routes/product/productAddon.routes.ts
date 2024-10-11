@@ -11,6 +11,8 @@ import {
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
 import { StaffRoles } from "../../types/type";
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const router: Router = express.Router();
 
@@ -20,6 +22,7 @@ router.post(
   validate(productAddonValidation.createProductAddon),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
+  upload.single('imageFile'),
   createProductAddon
 );
 

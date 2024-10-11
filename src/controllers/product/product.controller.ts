@@ -2,9 +2,13 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ProductModel from "../../models/products/products.model";
 import { ProductStatus, Status } from "../../types/type";
+import { uploadFile } from "../../middlewares/upload";
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 
 // Create a new product
-export const createProduct = async (req: Request, res: Response) => {
+const createProduct = async (req: Request, res: Response) => {
   const {
     recipeId,
     categoryId,
@@ -12,7 +16,20 @@ export const createProduct = async (req: Request, res: Response) => {
     sellingPrice,
     availabilityStatus,
   } = req.body;
+  console.log(req.body);
+
   const lastUpdatedBy = req.userId; // assuming userId is attached to the request
+  const file = req.file;
+
+  let imageUrl: string | undefined;
+
+  // Upload the file and get the fileName
+  if (file) {
+    const fileName = await uploadFile(file);
+    console.log(`Uploaded file: ${fileName}`);
+    imageUrl = fileName; // Construct the URL
+    await unlinkFile(file.path);
+  }
 
   try {
     const newProduct = new ProductModel({
@@ -20,21 +37,20 @@ export const createProduct = async (req: Request, res: Response) => {
       categoryId: new mongoose.Types.ObjectId(categoryId),
       description,
       sellingPrice,
-      availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK, // Default to IN_STOCK if not provided
+      imageUrl: imageUrl, // Save the image URL in the product document
+      availabilityStatus: availabilityStatus || ProductStatus.IN_STOCK,
       lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
     });
 
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
+    const data = await newProduct.save();
+    res.status(201).json({ message: "Successfully updated", data });
   } catch (error: any) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
 };
+
 // Get all products with optional categoryId as a query parameter
-export const getAllProductsCategoryWise = async (
-  req: Request,
-  res: Response
-) => {
+const getAllProductsCategoryWise = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.query; // Extract categoryId from query parameters
 
@@ -52,7 +68,7 @@ export const getAllProductsCategoryWise = async (
 };
 
 // Get all products
-export const getAllProducts = async (req: Request, res: Response) => {
+const getAllProducts = async (req: Request, res: Response) => {
   try {
     const products = await ProductModel.find(
       {
@@ -80,7 +96,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 };
 
 // Get product by ID
-export const getProductById = async (req: Request, res: Response) => {
+const getProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -104,7 +120,7 @@ export const getProductById = async (req: Request, res: Response) => {
 };
 
 // Update a product
-export const updateProduct = async (req: Request, res: Response) => {
+const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const {
     recipeId,
@@ -144,7 +160,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 // Soft delete a product (Change status to DELETED)
-export const deleteProduct = async (req: Request, res: Response) => {
+const deleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -161,4 +177,13 @@ export const deleteProduct = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error", details: error });
   }
+};
+
+export default {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+  getAllProductsCategoryWise
 };

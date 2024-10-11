@@ -13,6 +13,10 @@ export interface Config {
   secret: string;
   encryption_key: string;
   salt_rounds: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+  bucket: string;
 }
 const config: Config = {
   port: parseInt(process.env.PORT || "4041", 10),
@@ -24,6 +28,10 @@ const config: Config = {
   secret: process.env.SECRET || "",
   salt_rounds: process.env.SALT_ROUNDS || "10",
   encryption_key: process.env.ENCRYPTION_KEY || "",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+  region: process.env.AWS_REGION || "",
+  bucket: process.env.BUCKET || "",
 };
 
 export default config;

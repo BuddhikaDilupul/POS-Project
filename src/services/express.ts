@@ -13,7 +13,6 @@ import authJwt from "../middlewares/jwt";
 let  swaggerDocument =  require('../../swagger-output.json');
 
 export const app = express();
-
 // Middleware setup
 app.use(morgan("tiny"));
 app.use(express.json({ limit: "50mb" }));
