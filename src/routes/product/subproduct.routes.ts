@@ -1,13 +1,7 @@
 import express, { Router } from "express";
 import { validate } from "express-validation";
 import subProductValidation from "../../validations/subProduct.validation";
-import {
-  createSubProduct,
-  getAllSubProducts,
-  getSubProductById,
-  updateSubProduct,
-  deleteSubProduct,
-} from "../../controllers/product/subProduct.controller";
+import subProductController from "../../controllers/product/subProduct.controller";
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
 import { StaffRoles } from "../../types/type";
@@ -19,11 +13,11 @@ const router: Router = express.Router();
 // Create a new sub-product
 router.post(
   "/create",
+  upload.single('imageFile'),
   validate(subProductValidation.createSubProduct),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
-  upload.single('imageFile'),
-  createSubProduct
+  subProductController.createSubProduct
 );
 
 // Get all sub-products
@@ -31,7 +25,7 @@ router.get(
   "/all",
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  getAllSubProducts
+  subProductController.getAllSubProducts
 );
 
 // Get a sub-product by ID
@@ -39,7 +33,7 @@ router.get(
   "/:id",
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER, StaffRoles.CASHIER]),
-  getSubProductById
+  subProductController.getSubProductById
 );
 
 // Update a sub-product
@@ -48,7 +42,7 @@ router.put(
   validate(subProductValidation.updateSubProduct),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
-  updateSubProduct
+  subProductController.updateSubProduct
 );
 
 // Soft delete a sub-product
@@ -56,7 +50,7 @@ router.delete(
   "/:id",
   authenticate,
   authorize([StaffRoles.ADMIN]),
-  deleteSubProduct
+  subProductController.deleteSubProduct
 );
 
 export default router;

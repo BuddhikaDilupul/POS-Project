@@ -2,9 +2,12 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import SubProductModel from "../../models/products/subProducts.model";
 import { ProductStatus, Status } from "../../types/type";
-
+import { uploadFile } from "../../middlewares/upload";
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 // Create a new sub-product
-export const createSubProduct = async (req: Request, res: Response) => {
+const createSubProduct = async (req: Request, res: Response) => {
   const {
     name,
     inStockQuantity,
@@ -13,6 +16,16 @@ export const createSubProduct = async (req: Request, res: Response) => {
     availabilityStatus,
   } = req.body;
   const lastUpdatedBy = req.userId; // Assuming userId is attached to the request object
+  const file = req.file;
+
+  let imageUrl: string | undefined;
+
+  // Upload the file and get the fileName
+  if (file) {
+    const fileName = await uploadFile(file);
+    imageUrl = fileName; // Construct the URL
+    await unlinkFile(file.path);
+  }
 
   try {
     const newSubProduct = new SubProductModel({
@@ -35,7 +48,7 @@ export const createSubProduct = async (req: Request, res: Response) => {
 };
 
 // Get all sub-products
-export const getAllSubProducts = async (req: Request, res: Response) => {
+const getAllSubProducts = async (req: Request, res: Response) => {
   try {
     const subProducts = await SubProductModel.find({
       status: { $ne: Status.DELETED &&  Status.CLOSED },
@@ -50,7 +63,7 @@ export const getAllSubProducts = async (req: Request, res: Response) => {
 };
 
 // Get a sub-product by ID
-export const getSubProductById = async (req: Request, res: Response) => {
+const getSubProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -67,7 +80,7 @@ export const getSubProductById = async (req: Request, res: Response) => {
 };
 
 // Update a sub-product
-export const updateSubProduct = async (req: Request, res: Response) => {
+const updateSubProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, inStockQuantity, purchasedCost, status, availabilityStatus } =
     req.body;
@@ -100,7 +113,7 @@ export const updateSubProduct = async (req: Request, res: Response) => {
 };
 
 // Soft delete a sub-product (change status to DELETED)
-export const deleteSubProduct = async (req: Request, res: Response) => {
+const deleteSubProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
@@ -120,3 +133,11 @@ export const deleteSubProduct = async (req: Request, res: Response) => {
       .json({ error: "Internal Server Error", details: error.message });
   }
 };
+
+export default {
+  createSubProduct,
+  getAllSubProducts,
+  getSubProductById,
+  updateSubProduct,
+  deleteSubProduct,
+}

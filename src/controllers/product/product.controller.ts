@@ -26,7 +26,6 @@ const createProduct = async (req: Request, res: Response) => {
   // Upload the file and get the fileName
   if (file) {
     const fileName = await uploadFile(file);
-    console.log(`Uploaded file: ${fileName}`);
     imageUrl = fileName; // Construct the URL
     await unlinkFile(file.path);
   }

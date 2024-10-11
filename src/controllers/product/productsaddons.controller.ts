@@ -2,11 +2,25 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ProductAddonModel from "../../models/products/productsaddons.model";
 import { Status, ProductStatus } from "../../types/type";
+import { uploadFile } from "../../middlewares/upload";
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
 
 // Create a new product addon
 const createProductAddon = async (req: Request, res: Response) => {
   const { stockId, ingredientsId, sellingQuantity, sellingPrice, availabilityStatus } = req.body;
   const lastUpdatedBy = req.userId; // assuming `userId` is attached to the request
+  const file = req.file;
+
+  let imageUrl: string | undefined;
+
+  // Upload the file and get the fileName
+  if (file) {
+    const fileName = await uploadFile(file);
+    imageUrl = fileName; // Construct the URL
+    await unlinkFile(file.path);
+  }
 
   try {
     const newProductAddon = new ProductAddonModel({

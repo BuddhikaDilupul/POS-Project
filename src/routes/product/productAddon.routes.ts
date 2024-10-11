@@ -13,10 +13,10 @@ const router: Router = express.Router();
 // Create a new product addon
 router.post(
   "/create",
+  upload.single('imageFile'),
   validate(productAddonValidation.createProductAddon),
   authenticate,
   authorize([StaffRoles.ADMIN, StaffRoles.MANAGER]),
-  upload.single('imageFile'),
   productAddOns.createProductAddon
 );
 
