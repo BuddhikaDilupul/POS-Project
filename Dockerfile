@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 4040
 
 # Command to run the application
-CMD ["node", "./index.js"]
+CMD ["node", "./dist/index.js"]
