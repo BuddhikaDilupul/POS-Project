@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ICashInHandModel from "../../models/cashInHand/cashInHand.model";
 import { Status } from "../../utils/types/type";
+import { sendResponse } from "../../utils/response";
+import httpStatus from "http-status";
 
 // Create a new cash entry
 const createCashInHand = async (req: Request, res: Response) => {
@@ -15,11 +17,11 @@ const createCashInHand = async (req: Request, res: Response) => {
     });
 
     const savedCashInHand = await cashInHand.save();
-    res.status(201).json(savedCashInHand);
+    sendResponse(res, httpStatus.CREATED, "Item Recorded Successfully", savedCashInHand);
+    return
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to create cash entry", details: error });
+    sendResponse(res, httpStatus.INTERNAL_SERVER_ERROR, "Failed to create cash entry");
+    return
   }
 };
 
@@ -68,7 +70,7 @@ const updateCashInHand = async (req: Request, res: Response) => {
     const updatedCashInHand = await ICashInHandModel.findByIdAndUpdate(
       id,
       {
-        cash:cash,
+        cash: cash,
         lastUpdatedBy: new mongoose.Types.ObjectId(lastUpdatedBy),
       },
       { new: true, runValidators: true }

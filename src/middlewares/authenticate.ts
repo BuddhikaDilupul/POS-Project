@@ -1,6 +1,8 @@
 import express from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config"; // Adjust path if needed
+import { sendErrorResponse, sendResponse } from "../utils/response";
+import httpStatus from "http-status";
 
 interface DecodedToken {
   role: string;
@@ -29,7 +31,12 @@ export const authenticate = (
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-      return res.status(401).json({ message: "Authorization token missing" });
+      sendResponse(
+        res,
+        httpStatus.UNAUTHORIZED,
+        "Authorization token missing"
+      );
+      return 
     }
 
     // Verify and decode the token
@@ -48,6 +55,11 @@ export const authenticate = (
       throw new Error("Invalid token structure");
     }
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
+    sendResponse(
+      res,
+      httpStatus.UNAUTHORIZED,
+      "Invalid token"
+    );
+    return
   }
 };

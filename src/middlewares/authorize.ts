@@ -10,6 +10,8 @@ declare global {
 
 
 import { Request, Response, NextFunction } from 'express';
+import { sendResponse } from '../utils/response';
+import httpStatus from 'http-status';
 
 // Define the type for the roles parameter
 type Roles = string[];
@@ -20,7 +22,12 @@ export const authorize = (roles: Roles) => {
     if (roles.includes(req.role || '')) {
       next();
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      sendResponse(
+        res,
+        httpStatus.UNAUTHORIZED,
+        "Unauthorized attempt"
+      );
+      return
     }
   };
 };
