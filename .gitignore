@@ -79,6 +79,7 @@ web_modules/
 .env.production.local
 .env.local
 swagger-output.json
+firestore.json
 env.yaml
 # parcel-bundler cache (https://parceljs.org/)
 .cache
