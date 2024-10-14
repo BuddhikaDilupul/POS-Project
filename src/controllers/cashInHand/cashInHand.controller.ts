@@ -17,11 +17,20 @@ const createCashInHand = async (req: Request, res: Response) => {
     });
 
     const savedCashInHand = await cashInHand.save();
-    sendResponse(res, httpStatus.CREATED, "Item Recorded Successfully", savedCashInHand);
-    return
+    sendResponse(
+      res,
+      httpStatus.CREATED,
+      "Item Recorded Successfully",
+      savedCashInHand
+    );
+    return;
   } catch (error) {
-    sendResponse(res, httpStatus.INTERNAL_SERVER_ERROR, "Failed to create cash entry");
-    return
+    sendResponse(
+      res,
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to create cash entry"
+    );
+    return;
   }
 };
 
@@ -31,11 +40,15 @@ const getAllCashInHand = async (req: Request, res: Response) => {
     const cashEntries = await ICashInHandModel.find({
       status: { $ne: Status.DELETED },
     });
-    res.status(200).json(cashEntries);
+    sendResponse(res, httpStatus.OK, null, cashEntries);
+    return;
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to fetch cash entries", details: error });
+    sendResponse(
+      res,
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to fetch cash entries"
+    );
+    return;
   }
 };
 
@@ -49,14 +62,18 @@ const getCashInHandById = async (req: Request, res: Response) => {
     });
 
     if (!cashInHand) {
-      return res.status(404).json({ error: "Cash entry not found" });
+      sendResponse(res, httpStatus.NOT_FOUND, "Cash entry not found");
+      return;
     }
 
     res.status(200).json(cashInHand);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to fetch cash entry", details: error });
+    sendResponse(
+      res,
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to fetch cash entry"
+    );
+    return;
   }
 };
 
@@ -77,14 +94,19 @@ const updateCashInHand = async (req: Request, res: Response) => {
     );
 
     if (!updatedCashInHand) {
-      return res.status(404).json({ error: "Cash entry not found" });
+      sendResponse(res, httpStatus.NOT_FOUND, "Cash entry not found");
+      return;
     }
 
-    res.status(200).json(updatedCashInHand);
+    sendResponse(res, httpStatus.OK, null, updatedCashInHand);
+    return;
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to update cash entry", details: error });
+    sendResponse(
+      res,
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to update cash entry"
+    );
+    return;
   }
 };
 
@@ -100,16 +122,23 @@ const deleteCashInHand = async (req: Request, res: Response) => {
     );
 
     if (!deletedCashInHand) {
-      return res.status(404).json({ error: "Cash entry not found" });
+      sendResponse(res, httpStatus.NOT_FOUND, "Cash entry not found");
+      return;
     }
-
-    res
-      .status(200)
-      .json({ message: "Cash entry deleted successfully", deletedCashInHand });
+    sendResponse(
+      res,
+      httpStatus.OK,
+      "Cash entry deleted successfully",
+      deletedCashInHand
+    );
+    return;
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Failed to delete cash entry", details: error });
+    sendResponse(
+      res,
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to delete cash entry"
+    );
+    return;
   }
 };
 

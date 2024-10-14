@@ -1,7 +1,7 @@
 import express from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config"; // Adjust path if needed
-import { sendErrorResponse, sendResponse } from "../utils/response";
+import { sendResponse } from "../utils/response";
 import httpStatus from "http-status";
 
 interface DecodedToken {
